@@ -1,0 +1,21 @@
+[package]
+name = "rest_articles_axum"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "^0.7"
+tokio = { version = "^1.37", features = ["full"] }
+serde = { version = "^1", features = ["derive"] }
+# mongodb = "^2.8"
+# bson = "^2.10"
+# jsonwebtoken = "^9.3"
+thiserror = "^1"
+tower = "^0.4"
+tower-http = { version = "^0.5", features = ["cors"] }
+chrono = { version = "^0.4", features = ["serde"] }
+async-trait = "^0.1"
+utoipa = { version = "^4.2", features = ["chrono", "preserve_order", "preserve_path_order"] }
+utoipa-swagger-ui = { version = "^6", features = ["axum"] }
