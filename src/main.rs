@@ -14,9 +14,13 @@ use crate::{
 };
 use axum::{serve, Router};
 use chrono::{DateTime, Utc};
+use std::time::Duration;
 use std::{net::SocketAddr, sync::Arc};
 use tokio::sync::Mutex;
+use tower_http::catch_panic::CatchPanicLayer;
+use tower_http::compression::CompressionLayer;
 use tower_http::cors::CorsLayer;
+use tower_http::timeout::TimeoutLayer;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
@@ -65,7 +69,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             "/v1",
             Router::new().merge(article_controller::route(article_controller_state)),
         )
-        .layer(cors_layer);
+        .layer(cors_layer)
+        .layer(CatchPanicLayer::new())
+        .layer(TimeoutLayer::new(Duration::from_secs(10)))
+        .layer(CompressionLayer::new());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     println!("Server listening on http://{}", addr);
