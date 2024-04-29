@@ -60,10 +60,7 @@ async fn get_article_by_id(
     responses(
         (status = 200, body = Vec<ReadArticleDTO>)
     ),
-    params(
-        ("pageNumber" = i32, Query,),
-        ("pageSize" = i32, Query,)
-    )
+    params(PaginationParams),
 )]
 async fn get_articles(
     State(state): State<ArticleControllerState>,
