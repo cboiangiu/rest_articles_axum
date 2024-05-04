@@ -1,10 +1,11 @@
 use super::{BaseEntity, EntityWithId};
 use crate::{dtos::article_dto::ReadArticleDTO, errors::ArticleError};
+use bson::oid::ObjectId;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct ArticleEntity {
+pub struct Article {
     #[serde(flatten)]
     pub base: BaseEntity,
     pub title: String,
@@ -12,20 +13,19 @@ pub struct ArticleEntity {
     pub published_date: DateTime<Utc>,
 }
 
-impl EntityWithId for ArticleEntity {
-    fn get_id(&self) -> i32 {
-        self.base.id
+impl EntityWithId for Article {
+    fn get_id(&self) -> &ObjectId {
+        self.base.id.as_ref().unwrap()
     }
-
-    fn set_id(&mut self, id: i32) {
-        self.base.id = id;
+    fn set_id(&mut self, id: ObjectId) {
+        self.base.id = Some(id);
     }
 }
 
-impl ArticleEntity {
+impl Article {
     pub fn new() -> Self {
         Self {
-            base: BaseEntity { id: 0 },
+            base: BaseEntity { id: None },
             title: "".to_string(),
             content: "".to_string(),
             published_date: Utc::now(),
@@ -56,12 +56,14 @@ impl ArticleEntity {
         Ok(())
     }
 
-    const TITLE_MAX_LENGTH: usize = 60;
-    const CONTENT_MAX_LENGTH: usize = 20000;
+    pub const TITLE_MAX_LENGTH: usize = 60;
+    pub const CONTENT_MAX_LENGTH: usize = 20000;
+}
 
-    pub fn to_read_dto(&self) -> ReadArticleDTO {
+impl Into<ReadArticleDTO> for Article {
+    fn into(self) -> ReadArticleDTO {
         ReadArticleDTO {
-            id: self.base.id,
+            id: self.base.id.as_ref().unwrap().to_hex(),
             title: self.title.clone(),
             content: self.content.clone(),
             published_date: self.published_date.clone(),

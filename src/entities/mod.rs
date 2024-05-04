@@ -1,12 +1,19 @@
-pub mod article_entity;
+pub mod article;
+use axum::async_trait;
+use bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
+use std::fmt::Debug;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct BaseEntity {
-    pub id: i32,
+    #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
+    pub id: Option<ObjectId>,
 }
 
-pub trait EntityWithId {
-    fn get_id(&self) -> i32;
-    fn set_id(&mut self, id: i32);
+#[async_trait]
+pub trait EntityWithId:
+    Send + Sync + Debug + Default + Clone + Serialize + for<'a> Deserialize<'a> + Unpin
+{
+    fn get_id(&self) -> &ObjectId;
+    fn set_id(&mut self, id: ObjectId);
 }

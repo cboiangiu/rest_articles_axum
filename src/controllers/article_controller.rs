@@ -1,6 +1,9 @@
 use super::PaginationParams;
 use crate::{
-    dtos::article_dto::{CreateArticleDTO, ReadArticleDTO, UpdateArticleDTO},
+    dtos::{
+        article_dto::{CreateArticleDTO, ReadArticleDTO, UpdateArticleDTO},
+        ErrorDTO, PaginatedDTO,
+    },
     errors::ArticleError,
     services::article_service::ArticleService,
 };
@@ -24,7 +27,7 @@ pub struct ArticleControllerState {
     request_body = CreateArticleDTO,
     responses(
         (status = 201, body = ReadArticleDTO),
-        (status = 400, body = ArticleError)
+        (status = 400, body = ErrorDTO)
     )
 )]
 async fn insert_article(
@@ -40,15 +43,15 @@ async fn insert_article(
     path = "/v1/articles/{id}",
     responses(
         (status = 200, body = ReadArticleDTO),
-        (status = 404, body = ArticleError)
+        (status = 404, body = ErrorDTO)
     ),
     params(
-        ("id" = i32, Path,)
+        ("id" = String, Path,)
     )
 )]
 async fn get_article_by_id(
     State(state): State<ArticleControllerState>,
-    Path(id): Path<i32>,
+    Path(id): Path<String>,
 ) -> Result<Json<ReadArticleDTO>, ArticleError> {
     let result = state.article_service.get_article_by_id(id).await?;
     Ok(Json(result))
@@ -58,14 +61,14 @@ async fn get_article_by_id(
     get,
     path = "/v1/articles",
     responses(
-        (status = 200, body = Vec<ReadArticleDTO>)
+        (status = 200, body = PaginatedReadArticleDTO)
     ),
     params(PaginationParams),
 )]
 async fn get_articles(
     State(state): State<ArticleControllerState>,
     Query(pagination): Query<PaginationParams>,
-) -> Result<Json<Vec<ReadArticleDTO>>, ArticleError> {
+) -> Result<Json<PaginatedDTO<ReadArticleDTO>>, ArticleError> {
     let result = state
         .article_service
         .get_articles_paginated(pagination.page_number, pagination.page_size)
@@ -79,16 +82,16 @@ async fn get_articles(
     request_body = UpdateArticleDTO,
     responses(
         (status = 200, body = ReadArticleDTO),
-        (status = 400, body = ArticleError),
-        (status = 404, body = ArticleError)
+        (status = 400, body = ErrorDTO),
+        (status = 404, body = ErrorDTO)
     ),
     params(
-        ("id" = i32, Path,)
+        ("id" = String, Path,)
     )
 )]
 async fn update_article(
     State(state): State<ArticleControllerState>,
-    Path(id): Path<i32>,
+    Path(id): Path<String>,
     article: Json<UpdateArticleDTO>,
 ) -> Result<Json<ReadArticleDTO>, ArticleError> {
     let result = state.article_service.update_article(id, article.0).await?;
@@ -100,15 +103,15 @@ async fn update_article(
     path = "/v1/articles/{id}",
     responses(
         (status = 204),
-        (status = 404, body = ArticleError)
+        (status = 404, body = ErrorDTO)
     ),
     params(
-        ("id" = i32, Path,)
+        ("id" = String, Path,)
     )
 )]
 async fn delete_article(
     State(state): State<ArticleControllerState>,
-    Path(id): Path<i32>,
+    Path(id): Path<String>,
 ) -> Result<StatusCode, ArticleError> {
     state.article_service.delete_article(id).await?;
     Ok(StatusCode::NO_CONTENT)
@@ -130,12 +133,14 @@ pub fn route(state: ArticleControllerState) -> Router {
 
 impl IntoResponse for ArticleError {
     fn into_response(self) -> Response {
-        let (status_code, body) = match self {
-            ArticleError::ArgumentNullError(_) => (StatusCode::BAD_REQUEST, self.to_string()),
-            ArticleError::TextTooLongError(_) => (StatusCode::BAD_REQUEST, self.to_string()),
-            ArticleError::NotFoundError => (StatusCode::NOT_FOUND, self.to_string()),
+        let status_code = match self {
+            ArticleError::ArgumentNullError(_) => StatusCode::BAD_REQUEST,
+            ArticleError::InvalidObjectIdError => StatusCode::BAD_REQUEST,
+            ArticleError::TextTooLongError(_) => StatusCode::BAD_REQUEST,
+            ArticleError::NotFoundError => StatusCode::NOT_FOUND,
         };
+        let error_dto: ErrorDTO = self.into();
 
-        (status_code, body).into_response()
+        (status_code, error_dto).into_response()
     }
 }

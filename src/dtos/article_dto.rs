@@ -12,7 +12,7 @@ pub struct CreateArticleDTO {
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "camelCase")]
 pub struct ReadArticleDTO {
-    pub id: i32,
+    pub id: String,
     pub title: String,
     pub content: String,
     pub published_date: DateTime<Utc>,
