@@ -31,6 +31,7 @@ pub fn map_get_article_v1_endpoint(state: ApiModuleState) -> Router {
     ),
     responses(
         (status = 200, body = GetArticleResponse),
+        (status = 404, body = ErrorResponse),
         (status = 500, body = ErrorResponse)
     )
 )]
