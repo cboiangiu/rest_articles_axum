@@ -16,8 +16,11 @@ bson = "^2.10"
 # jsonwebtoken = "^9.3"
 thiserror = "^1"
 tower = "^0.4"
-tower-http = { version = "^0.5", features = ["cors", "catch-panic", "compression-full", "timeout"] }
+tower-http = { version = "^0.5", features = ["fs", "cors", "catch-panic", "compression-full", "timeout"] }
 chrono = { version = "^0.4", features = ["serde"] }
 async-trait = "^0.1"
 utoipa = { version = "^4.2", features = ["chrono", "preserve_order", "preserve_path_order"] }
 utoipa-swagger-ui = { version = "^6", features = ["axum"] }
+askama = "0.12.1"
+askama_axum = "0.4.0"
+o2o = "0.4.3"

@@ -1,5 +1,3 @@
-pub mod data;
-pub mod dtos;
-pub mod entities;
-pub mod errors;
-pub mod services;
+pub mod domain;
+pub mod framework;
+pub mod modules;

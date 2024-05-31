@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>rest_articles_axum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+</head>
+
+<body>
+    <main class="flex flex-row justify-center w-full">
+        <div class="flex flex-col justify-center w-full">
+            <div class="flex flex-col items-center gap-3 bg-orange-100 p-10">
+                <h1 class="text-5xl font-bold pb-5">Latest Articles</h1>
+            </div>
+            {{ article_list_component|safe }}
+        </div>
+    </main>
+</body>
+
+</html>
