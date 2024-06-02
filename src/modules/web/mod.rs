@@ -7,7 +7,9 @@ use self::features::{
 use super::api::persistence::{self, ArticleRepository};
 use crate::{
     domain::articles::article::Article,
-    framework::infrastructure::persistence::mongo_repository::MongoEntityRepository,
+    framework::infrastructure::{
+        persistence::mongo_repository::MongoEntityRepository, reverse_proxy::reverse_proxy_router,
+    },
 };
 use axum::Router;
 use std::sync::Arc;
@@ -36,5 +38,9 @@ pub fn map_endpoints(state: WebModuleState) -> axum::Router {
         .nest_service(
             "/favicon.ico",
             tower_http::services::ServeFile::new("assets/web/favicon.ico"),
+        )
+        .nest(
+            "/x/1",
+            reverse_proxy_router("1".to_string(), "127.0.0.1:3001".to_string()),
         )
 }

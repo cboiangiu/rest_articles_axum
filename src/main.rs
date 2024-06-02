@@ -5,7 +5,10 @@ use crate::framework::infrastructure::open_api::ApiDoc;
 use crate::modules::api;
 use crate::modules::web;
 use axum::{serve, Router};
-use modules::api::ApiModuleState;
+// use modules::api::features::articles::article::get_article_v1::proto_get_article::get_article_v1_server::GetArticleV1Server;
+// use modules::api::features::articles::article::get_article_v1::GetArticleV1Grpc;
+// use modules::api::ApiModuleState;
+// use tonic::transport::Server;
 use std::net::SocketAddr;
 use std::time::Duration;
 use tower_http::catch_panic::CatchPanicLayer;
@@ -14,11 +17,10 @@ use tower_http::cors::CorsLayer;
 use tower_http::timeout::TimeoutLayer;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-
-#[derive(Clone)]
-pub struct AppState {
-    pub api_module_state: ApiModuleState,
-}
+// mod proto {
+//     pub(crate) const FILE_DESCRIPTOR_SET: &[u8] =
+//         tonic::include_file_descriptor_set!("rest_articles_axum_features_descriptor");
+// }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -26,8 +28,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_module_state = api::new_api_module_state().await;
 
     let app = Router::new()
-        .nest("/", web::map_endpoints(web_module_state))
-        .nest("/api", api::map_endpoints(api_module_state))
+        .nest("/", web::map_endpoints(web_module_state.clone()))
+        .nest("/api", api::map_endpoints(api_module_state.clone()))
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .layer(CorsLayer::permissive())
         .layer(CatchPanicLayer::new())
@@ -35,6 +37,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .layer(CompressionLayer::new());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    // let service2222 = tonic_reflection::server::Builder::configure()
+    //     .register_encoded_file_descriptor_set(proto::FILE_DESCRIPTOR_SET)
+    //     .build()
+    //     .unwrap();
+    // let getArticleV1Grpc = GetArticleV1Grpc {
+    //     state: api_module_state.clone(),
+    // };
+    // Server::builder()
+    //     .add_service(service2222)
+    //     .add_service(GetArticleV1Server::new(getArticleV1Grpc))
+    //     .serve(addr)
+    //     .await?;
+
     println!("Server listening on http://{}", addr);
     println!("Web available at http://{}", addr);
     println!("Swagger available at http://{}/swagger-ui", addr);

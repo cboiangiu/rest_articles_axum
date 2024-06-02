@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package api.articles.article.delete_articles.v1;
+
+service DeleteArticlesV1 {
+  rpc Handler(DeleteArticlesCommand) returns (google.protobuf.Empty);
+}
+
+message DeleteArticlesCommand { repeated string articles = 1; }

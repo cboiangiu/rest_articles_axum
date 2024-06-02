@@ -2,12 +2,15 @@
 name = "rest_articles_axum"
 version = "0.1.0"
 edition = "2021"
+publish = false
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 axum = "^0.7"
-tokio = { version = "^1.37", features = ["full"] }
+tokio = { version = "^1.38", features = ["full"] }
+tonic = { version = "^0.11" }
+tonic-reflection = "^0.11"
 serde = { version = "^1", features = ["derive"] }
 serde_json = "^1"
 mongodb = "^2.8"
@@ -20,7 +23,15 @@ tower-http = { version = "^0.5", features = ["fs", "cors", "catch-panic", "compr
 chrono = { version = "^0.4", features = ["serde"] }
 async-trait = "^0.1"
 utoipa = { version = "^4.2", features = ["chrono", "preserve_order", "preserve_path_order"] }
-utoipa-swagger-ui = { version = "^6", features = ["axum"] }
-askama = "0.12.1"
-askama_axum = "0.4.0"
-o2o = "0.4.3"
+utoipa-swagger-ui = { version = "^7.1", features = ["axum"] }
+askama = "^0.12"
+askama_axum = "^0.4"
+o2o = "^0.4"
+hyper = { version = "^1.3", features = ["full"] }
+hyper-util = { version = "^0.1", features = ["full"] }
+prost = "^0.12"
+prost-types = "^0.12"
+futures = "^0.3"
+
+[build-dependencies]
+tonic-build = { version = "^0.11", features = ["prost"] }

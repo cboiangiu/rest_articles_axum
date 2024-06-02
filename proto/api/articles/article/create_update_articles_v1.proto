@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "core/create_update_entities_response.proto";
+
+package api.articles.article.create_update_articles.v1;
+
+service CreateUpdateArticlesV1 {
+  rpc Handler(CreateUpdateArticlesCommand)
+      returns (core.CreateUpdateEntitiesResponse);
+}
+
+message CreateUpdateArticlesCommand {
+  repeated CreateUpdateArticleCommand articles = 1;
+}
+
+message CreateUpdateArticleCommand {
+  optional string id = 1;
+  string title = 2;
+  string content = 3;
+}

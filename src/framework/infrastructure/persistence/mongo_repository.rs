@@ -42,6 +42,7 @@ impl<T: EntityWithId> MongoEntityRepository<T> {
 pub trait MongoRepository<T: EntityWithId>: Send + Sync + Debug {
     async fn insert(&self, entity: T) -> Result<T, ApiError>;
     async fn get_by_id(&self, id: String) -> Result<Option<T>, ApiError>;
+    #[allow(dead_code)]
     async fn get_all(&self) -> Result<Vec<T>, ApiError>;
     async fn get_all_paginated(
         &self,

@@ -1,3 +1,4 @@
+use crate::framework::core::errors::map_api_error;
 use crate::{
     domain::articles::article::Article,
     framework::core::{domain::EntityWithId, errors::ApiError},
@@ -14,7 +15,13 @@ use chrono::{DateTime, Utc};
 use o2o::o2o;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
+use tonic::async_trait;
+use tonic::{Request, Response, Status};
 use utoipa::ToSchema;
+pub mod proto {
+    include!(concat!(env!("OUT_DIR"), "/_includes.rs"));
+}
+pub use proto::api::articles::article::get_article::v1 as proto_get_article;
 
 pub fn map_get_article_v1_endpoint(state: ApiModuleState) -> Router {
     Router::new()
@@ -42,6 +49,28 @@ async fn get_article_v1_endpoint(
     get_article_handler(state.article_repository, GetArticleQuery { id }).await
 }
 
+pub struct GetArticleV1Grpc {
+    pub state: ApiModuleState,
+}
+
+#[async_trait]
+impl proto_get_article::get_article_v1_server::GetArticleV1 for GetArticleV1Grpc {
+    async fn handler(
+        &self,
+        query: Request<proto_get_article::GetArticleQuery>,
+    ) -> Result<Response<proto_get_article::GetArticleResponse>, Status> {
+        let item = get_article_handler(
+            self.state.article_repository.clone(),
+            query.into_inner().into(),
+        )
+        .await
+        .map_err(map_api_error)?
+        .1
+         .0;
+        Ok(Response::new(item.into()))
+    }
+}
+
 pub async fn get_article_handler(
     repository: Arc<dyn ArticleRepository>,
     query: GetArticleQuery,
@@ -60,7 +89,8 @@ pub async fn get_article_handler(
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, o2o)]
+#[from_owned(proto_get_article::GetArticleQuery)]
 #[serde(rename_all = "camelCase")]
 pub struct GetArticleQuery {
     pub id: String,
@@ -68,11 +98,14 @@ pub struct GetArticleQuery {
 
 #[derive(Debug, Serialize, Deserialize, ToSchema, o2o)]
 #[from_owned(Article)]
+#[owned_into(proto_get_article::GetArticleResponse)]
 #[serde(rename_all = "camelCase")]
 pub struct GetArticleResponse {
-    #[ghost(@.get_id().to_hex())]
+    // #[ghost(@.get_id().to_hex())]
+    #[from(@.get_id().to_hex())]
     pub id: String,
     pub title: String,
     pub content: String,
+    #[into(~.to_string())]
     pub published_date: DateTime<Utc>,
 }

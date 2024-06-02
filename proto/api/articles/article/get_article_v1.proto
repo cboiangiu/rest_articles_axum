@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package api.articles.article.get_article.v1;
+
+service GetArticleV1 {
+  rpc Handler(GetArticleQuery) returns (GetArticleResponse);
+}
+
+message GetArticleQuery { string id = 1; }
+
+message GetArticleResponse {
+  string id = 1;
+  string title = 2;
+  string content = 3;
+  string published_date = 4;
+}

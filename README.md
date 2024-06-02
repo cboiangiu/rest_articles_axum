@@ -1,5 +1,9 @@
 # rest_articles_axum
 
+## cloc
+
+`cloc --exclude-dir=target,.next,node_modules --not-match-f=package-lock.json .`
+
 ## TODO
 
 - implement and use postgres repository/orm solution

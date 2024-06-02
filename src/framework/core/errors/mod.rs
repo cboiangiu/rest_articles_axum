@@ -5,6 +5,7 @@ use axum::{
 };
 use serde::Serialize;
 use thiserror::Error;
+use tonic::Status;
 use utoipa::ToSchema;
 
 impl IntoResponse for ErrorResponse {
@@ -29,6 +30,7 @@ pub enum ApiError {
     TextTooLongError(String),
     #[error("NotFoundError")]
     NotFoundError,
+    #[allow(dead_code)]
     #[error("DuplicateEntityError")]
     DuplicateEntityError,
     #[error("InternalServerError")]
@@ -57,4 +59,16 @@ impl IntoResponse for ApiError {
 
         (status_code, erro).into_response()
     }
+}
+
+pub fn map_api_error(err: ApiError) -> Status {
+    let status_code = match err {
+        ApiError::ArgumentNullError(_) => tonic::Code::InvalidArgument,
+        ApiError::InvalidObjectIdError => tonic::Code::InvalidArgument,
+        ApiError::TextTooLongError(_) => tonic::Code::InvalidArgument,
+        ApiError::NotFoundError => tonic::Code::NotFound,
+        ApiError::DuplicateEntityError => tonic::Code::AlreadyExists,
+        ApiError::InternalServerError => tonic::Code::Internal,
+    };
+    Status::new(status_code, err.to_string())
 }

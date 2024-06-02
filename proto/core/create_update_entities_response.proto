@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package core;
+
+message CreateUpdateEntitiesResponse {
+  uint32 entities_created = 1;
+  uint32 entities_updated = 2;
+}

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package api.articles.article.get_article_list.v1;
+
+service GetArticleListV1 {
+  rpc Handler(GetArticleListQuery) returns (PaginatedGetArticleListResponse);
+}
+
+message GetArticleListQuery {
+  uint32 page_number = 1;
+  uint32 page_size = 2;
+}
+
+message PaginatedGetArticleListResponse {
+  repeated GetArticleListResponse items = 1;
+  uint32 page_number = 2;
+  uint32 page_size = 3;
+  uint64 total_items = 4;
+}
+
+message GetArticleListResponse {
+  string id = 1;
+  string title = 2;
+  string content = 3;
+  string published_date = 4;
+}
