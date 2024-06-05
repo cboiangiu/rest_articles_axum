@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-import "core/create_update_entities_response.proto";
+import "framework/core/create_update_entities_response.proto";
 
 package api.articles.article.create_update_articles.v1;
 
 service CreateUpdateArticlesV1 {
   rpc Handler(CreateUpdateArticlesCommand)
-      returns (core.CreateUpdateEntitiesResponse);
+      returns (framework.core.CreateUpdateEntitiesResponse);
 }
 
 message CreateUpdateArticlesCommand {

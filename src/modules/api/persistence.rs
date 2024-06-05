@@ -1,12 +1,11 @@
-use crate::{
-    domain::articles::article::Article,
-    framework::infrastructure::persistence::{
-        fake_mongo_repository::FakeMongoEntityRepository,
-        mongo_repository::{MongoEntityRepository, WithMongoRepository},
-    },
+use crate::framework::infrastructure::persistence::{
+    fake_mongo_repository::FakeMongoEntityRepository,
+    mongo_repository::{MongoEntityRepository, WithMongoRepository},
 };
 use axum::async_trait;
 use mongodb::{options::ClientOptions, Client, Collection};
+
+use super::domain::articles::article::Article;
 
 pub struct Collections {
     pub articles: Collection<Article>,

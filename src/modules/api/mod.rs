@@ -1,3 +1,4 @@
+pub mod domain;
 pub mod features;
 pub mod persistence;
 use self::features::articles::article::{
@@ -6,11 +7,9 @@ use self::features::articles::article::{
     get_article_list_v1::map_get_article_list_v1_endpoint,
     get_article_v1::map_get_article_v1_endpoint,
 };
-use crate::{
-    domain::articles::article::Article,
-    framework::infrastructure::persistence::mongo_repository::MongoEntityRepository,
-};
+use crate::framework::infrastructure::persistence::mongo_repository::MongoEntityRepository;
 use axum::Router;
+use domain::articles::article::Article;
 use persistence::ArticleRepository;
 use std::sync::Arc;
 

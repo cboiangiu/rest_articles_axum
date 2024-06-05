@@ -1,6 +1,6 @@
 use crate::framework::core::domain::EntityWithId;
+use crate::modules::api::domain::articles::article::Article;
 use crate::{
-    domain::articles::article::Article,
     framework::core::{
         errors::ApiError,
         paging::{PaginatedDTO, PaginationParams},

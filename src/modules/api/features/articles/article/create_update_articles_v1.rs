@@ -1,7 +1,8 @@
 use crate::{
-    domain::articles::article::Article,
     framework::core::{domain::EntityWithId, errors::ApiError, CreateUpdateEntitiesResponse},
-    modules::api::{persistence::ArticleRepository, ApiModuleState},
+    modules::api::{
+        domain::articles::article::Article, persistence::ArticleRepository, ApiModuleState,
+    },
 };
 use axum::{extract::State, http::StatusCode, response::IntoResponse, routing::put, Json, Router};
 use bson::oid::ObjectId;

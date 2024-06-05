@@ -4,12 +4,12 @@ use self::features::{
     articles::article::get_article::map_get_article_endpoint,
     index::index_page::map_index_page_endpoint,
 };
-use super::api::persistence::{self, ArticleRepository};
-use crate::{
+use super::api::{
     domain::articles::article::Article,
-    framework::infrastructure::{
-        persistence::mongo_repository::MongoEntityRepository, reverse_proxy::reverse_proxy_router,
-    },
+    persistence::{self, ArticleRepository},
+};
+use crate::framework::infrastructure::{
+    persistence::mongo_repository::MongoEntityRepository, reverse_proxy::reverse_proxy_router,
 };
 use axum::Router;
 use std::sync::Arc;

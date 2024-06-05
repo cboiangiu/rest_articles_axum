@@ -1,4 +1,3 @@
-mod domain;
 mod framework;
 mod modules;
 use crate::framework::infrastructure::open_api::ApiDoc;

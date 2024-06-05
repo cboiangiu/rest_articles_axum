@@ -1,8 +1,9 @@
 use crate::framework::core::errors::map_api_error;
 use crate::{
-    domain::articles::article::Article,
     framework::core::{domain::EntityWithId, errors::ApiError},
-    modules::api::{persistence::ArticleRepository, ApiModuleState},
+    modules::api::{
+        domain::articles::article::Article, persistence::ArticleRepository, ApiModuleState,
+    },
 };
 use axum::{
     extract::{Path, State},

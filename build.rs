@@ -12,7 +12,7 @@ fn main() {
                 "proto/api/articles/article/delete_articles_v1.proto",
                 "proto/api/articles/article/get_article_list_v1.proto",
                 "proto/api/articles/article/get_article_v1.proto",
-                "proto/core/create_update_entities_response.proto",
+                "proto/framework/core/create_update_entities_response.proto",
             ],
             &["proto"],
         )
