@@ -5,7 +5,7 @@ use crate::{
         errors::ApiError,
         paging::{PaginatedDTO, PaginationParams},
     },
-    modules::api::{persistence::ArticleRepository, ApiModuleState},
+    modules::api::{persistence::ArticleRepository, ApiState},
 };
 use axum::{
     extract::{Query, State},
@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use utoipa::ToSchema;
 
-pub fn map_get_article_list_v1_endpoint(state: ApiModuleState) -> Router {
+pub fn map_get_article_list_v1_endpoint(state: ApiState) -> Router {
     Router::new()
         .route("/", get(get_article_list_v1_endpoint))
         .with_state(state)
@@ -36,10 +36,10 @@ pub fn map_get_article_list_v1_endpoint(state: ApiModuleState) -> Router {
     )
 )]
 async fn get_article_list_v1_endpoint(
-    State(state): State<ApiModuleState>,
+    State(state): State<ApiState>,
     Query(pagination): Query<PaginationParams>,
 ) -> Result<(StatusCode, Json<PaginatedDTO<GetArticleListResponse>>), ApiError> {
-    get_article_list_handler(
+    handle(
         state.article_repository,
         GetArticleListQuery {
             page_number: pagination.page_number,
@@ -49,7 +49,7 @@ async fn get_article_list_v1_endpoint(
     .await
 }
 
-pub async fn get_article_list_handler(
+pub async fn handle(
     repository: Arc<dyn ArticleRepository>,
     query: GetArticleListQuery,
 ) -> Result<(StatusCode, Json<PaginatedDTO<GetArticleListResponse>>), ApiError> {

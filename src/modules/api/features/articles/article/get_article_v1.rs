@@ -1,9 +1,7 @@
 use crate::framework::core::errors::map_api_error;
 use crate::{
     framework::core::{domain::EntityWithId, errors::ApiError},
-    modules::api::{
-        domain::articles::article::Article, persistence::ArticleRepository, ApiModuleState,
-    },
+    modules::api::{domain::articles::article::Article, persistence::ArticleRepository, ApiState},
 };
 use axum::{
     extract::{Path, State},
@@ -24,7 +22,7 @@ pub mod proto {
 }
 pub use proto::api::articles::article::get_article::v1 as proto_get_article;
 
-pub fn map_get_article_v1_endpoint(state: ApiModuleState) -> Router {
+pub fn map_get_article_v1_endpoint(state: ApiState) -> Router {
     Router::new()
         .route("/:id", get(get_article_v1_endpoint))
         .with_state(state)
@@ -44,23 +42,23 @@ pub fn map_get_article_v1_endpoint(state: ApiModuleState) -> Router {
     )
 )]
 async fn get_article_v1_endpoint(
-    State(state): State<ApiModuleState>,
+    State(state): State<ApiState>,
     Path(id): Path<String>,
 ) -> Result<(StatusCode, Json<GetArticleResponse>), ApiError> {
-    get_article_handler(state.article_repository, GetArticleQuery { id }).await
+    handle(state.article_repository, GetArticleQuery { id }).await
 }
 
 pub struct GetArticleV1Grpc {
-    pub state: ApiModuleState,
+    pub state: ApiState,
 }
 
 #[async_trait]
 impl proto_get_article::get_article_v1_server::GetArticleV1 for GetArticleV1Grpc {
-    async fn handler(
+    async fn handle(
         &self,
         query: Request<proto_get_article::GetArticleQuery>,
     ) -> Result<Response<proto_get_article::GetArticleResponse>, Status> {
-        let item = get_article_handler(
+        let item = handle(
             self.state.article_repository.clone(),
             query.into_inner().into(),
         )
@@ -72,7 +70,7 @@ impl proto_get_article::get_article_v1_server::GetArticleV1 for GetArticleV1Grpc
     }
 }
 
-pub async fn get_article_handler(
+pub async fn handle(
     repository: Arc<dyn ArticleRepository>,
     query: GetArticleQuery,
 ) -> Result<(StatusCode, Json<GetArticleResponse>), ApiError> {

@@ -1,6 +1,6 @@
 # rest_articles_axum
 
-`Rust axum server` using `DDD + Vertical Slices` with `gRPC + REST Swagger API`, `Identity` module, `HTMX Web` module + `Next.js Web` module extension, `MongoDB + PostgreSQL` databases and `Unit tests`.
+`Rust axum server` using `DDD + Vertical Slices` with `gRPC + REST Swagger API` module, `Identity` module, `HTMX Web` module + `Next.js Web` module extension, `MongoDB + PostgreSQL` databases and `Unit tests`.
 
 ## Run
 

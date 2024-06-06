@@ -15,19 +15,19 @@ use axum::Router;
 use std::sync::Arc;
 
 #[derive(Clone)]
-pub struct WebModuleState {
+pub struct WebState {
     pub article_repository: Arc<dyn ArticleRepository>,
 }
 
-pub async fn new_web_module_state() -> WebModuleState {
+pub async fn new_web_state() -> WebState {
     let collections = persistence::connect_to_mongo().await.unwrap();
     let article_repository = MongoEntityRepository::<Article>::new(collections.articles.clone());
-    WebModuleState {
+    WebState {
         article_repository: Arc::new(article_repository.clone()),
     }
 }
 
-pub fn map_endpoints(state: WebModuleState) -> axum::Router {
+pub fn map_endpoints(state: WebState) -> axum::Router {
     Router::new()
         .merge(map_index_page_endpoint(state.clone()))
         .nest(

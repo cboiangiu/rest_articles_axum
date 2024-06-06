@@ -23,12 +23,12 @@ use utoipa_swagger_ui::SwaggerUi;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let web_module_state = web::new_web_module_state().await;
-    let api_module_state = api::new_api_module_state().await;
+    let web_state = web::new_web_state().await;
+    let api_state = api::new_api_state().await;
 
     let app = Router::new()
-        .nest("/", web::map_endpoints(web_module_state.clone()))
-        .nest("/api", api::map_endpoints(api_module_state.clone()))
+        .nest("/", web::map_endpoints(web_state.clone()))
+        .nest("/api", api::map_endpoints(api_state.clone()))
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", ApiDoc::openapi()))
         .layer(CorsLayer::permissive())
         .layer(CatchPanicLayer::new())

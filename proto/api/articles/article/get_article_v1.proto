@@ -3,7 +3,7 @@ syntax = "proto3";
 package api.articles.article.get_article.v1;
 
 service GetArticleV1 {
-  rpc Handler(GetArticleQuery) returns (GetArticleResponse);
+  rpc Handle(GetArticleQuery) returns (GetArticleResponse);
 }
 
 message GetArticleQuery { string id = 1; }

@@ -5,7 +5,7 @@ import "framework/core/create_update_entities_response.proto";
 package api.articles.article.create_update_articles.v1;
 
 service CreateUpdateArticlesV1 {
-  rpc Handler(CreateUpdateArticlesCommand)
+  rpc Handle(CreateUpdateArticlesCommand)
       returns (framework.core.CreateUpdateEntitiesResponse);
 }
 

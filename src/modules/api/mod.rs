@@ -14,19 +14,19 @@ use persistence::ArticleRepository;
 use std::sync::Arc;
 
 #[derive(Clone)]
-pub struct ApiModuleState {
+pub struct ApiState {
     pub article_repository: Arc<dyn ArticleRepository>,
 }
 
-pub async fn new_api_module_state() -> ApiModuleState {
+pub async fn new_api_state() -> ApiState {
     let collections = persistence::connect_to_mongo().await.unwrap();
     let article_repository = MongoEntityRepository::<Article>::new(collections.articles.clone());
-    ApiModuleState {
+    ApiState {
         article_repository: Arc::new(article_repository.clone()),
     }
 }
 
-pub fn map_endpoints(state: ApiModuleState) -> axum::Router {
+pub fn map_endpoints(state: ApiState) -> axum::Router {
     Router::new().nest(
         "/v1",
         Router::new().nest(

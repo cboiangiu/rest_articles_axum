@@ -1,8 +1,6 @@
 use crate::{
     framework::core::{domain::EntityWithId, errors::ApiError, CreateUpdateEntitiesResponse},
-    modules::api::{
-        domain::articles::article::Article, persistence::ArticleRepository, ApiModuleState,
-    },
+    modules::api::{domain::articles::article::Article, persistence::ArticleRepository, ApiState},
 };
 use axum::{extract::State, http::StatusCode, response::IntoResponse, routing::put, Json, Router};
 use bson::oid::ObjectId;
@@ -12,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use utoipa::ToSchema;
 
-pub fn map_create_update_articles_v1_endpoint(state: ApiModuleState) -> Router {
+pub fn map_create_update_articles_v1_endpoint(state: ApiState) -> Router {
     Router::new()
         .route("/", put(create_update_articles_v1_endpoint))
         .with_state(state)
@@ -31,13 +29,13 @@ pub fn map_create_update_articles_v1_endpoint(state: ApiModuleState) -> Router {
     )
 )]
 async fn create_update_articles_v1_endpoint(
-    State(state): State<ApiModuleState>,
+    State(state): State<ApiState>,
     request: Json<CreateUpdateArticlesCommand>,
 ) -> Result<(StatusCode, impl IntoResponse), ApiError> {
-    create_update_articles_handler(state.article_repository, request.0).await
+    handle(state.article_repository, request.0).await
 }
 
-pub async fn create_update_articles_handler(
+pub async fn handle(
     repository: Arc<dyn ArticleRepository>,
     command: CreateUpdateArticlesCommand,
 ) -> Result<(StatusCode, impl IntoResponse), ApiError> {

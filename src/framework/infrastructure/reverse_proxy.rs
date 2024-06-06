@@ -9,7 +9,7 @@ use axum::{
 use hyper::{StatusCode, Uri};
 use hyper_util::{client::legacy::connect::HttpConnector, rt::TokioExecutor};
 
-async fn reverse_proxy_handler(
+async fn handle(
     State(state): State<(String, String)>,
     mut req: Request,
 ) -> Result<Response, StatusCode> {
@@ -37,16 +37,16 @@ async fn reverse_proxy_handler(
         .into_response())
 }
 
-fn reverse_proxy_method_router(extension_number: String, ip_port: String) -> MethodRouter {
+fn method_router(extension_number: String, ip_port: String) -> MethodRouter {
     let state = (extension_number, ip_port);
-    get(reverse_proxy_handler)
-        .post(reverse_proxy_handler)
-        .put(reverse_proxy_handler)
-        .patch(reverse_proxy_handler)
-        .delete(reverse_proxy_handler)
-        .head(reverse_proxy_handler)
-        .options(reverse_proxy_handler)
-        .trace(reverse_proxy_handler)
+    get(handle)
+        .post(handle)
+        .put(handle)
+        .patch(handle)
+        .delete(handle)
+        .head(handle)
+        .options(handle)
+        .trace(handle)
         .with_state(state)
 }
 
@@ -54,10 +54,10 @@ pub fn reverse_proxy_router(extension_number: String, ip_port: String) -> Router
     Router::new()
         .route(
             "/",
-            reverse_proxy_method_router(extension_number.clone(), ip_port.clone()),
+            method_router(extension_number.clone(), ip_port.clone()),
         )
         .route(
             "/*path",
-            reverse_proxy_method_router(extension_number.clone(), ip_port.clone()),
+            method_router(extension_number.clone(), ip_port.clone()),
         )
 }
