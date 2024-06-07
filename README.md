@@ -7,10 +7,11 @@
 0. Ensure `MongoDB` running on port `27017`
 1. `cargo run`
 2. `npm run dev`
+3. Go to [`localhost:3000`](http://localhost:3000)
 
 ## cloc
 
-`cloc --exclude-dir=target,.next,node_modules --not-match-f=package-lock.json .`
+`cloc --exclude-dir=target,.next,node_modules,docs,assets --not-match-f=package-lock.json .`
 
 ## TODO
 
