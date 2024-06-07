@@ -11,7 +11,7 @@
 
 ## cloc
 
-`cloc --exclude-dir=target,.next,node_modules,docs,assets --not-match-f=package-lock.json .`
+`cloc --exclude-dir=target,.next,node_modules,docs,assets --not-match-f=".*\.(json|svg|md|toml)$" .`
 
 ## TODO
 
