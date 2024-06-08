@@ -1,11 +1,9 @@
-use crate::framework::infrastructure::persistence::{
-    fake_mongo_repository::FakeMongoEntityRepository,
-    mongo_repository::{MongoEntityRepository, WithMongoRepository},
+use super::domain::articles::article::Article;
+use crate::framework::infrastructure::persistence::mongo_repository::{
+    MongoEntityRepository, WithMongoRepository,
 };
 use axum::async_trait;
 use mongodb::{options::ClientOptions, Client, Collection};
-
-use super::domain::articles::article::Article;
 
 pub struct Collections {
     pub articles: Collection<Article>,
@@ -27,4 +25,4 @@ pub trait ArticleRepository: WithMongoRepository<Article> + Send + Sync {}
 
 impl ArticleRepository for MongoEntityRepository<Article> {}
 
-impl ArticleRepository for FakeMongoEntityRepository<Article> {}
+// impl ArticleRepository for FakeMongoEntityRepository<Article> {}
