@@ -20,7 +20,18 @@ _`rest_articles_axum`_ _is a blogging platform_
 
 ## cloc
 
-`cloc --exclude-dir=target,.next,node_modules,docs,assets,public,tests-examples,playwright-report,test-results --not-match-f=".*\.(json|md|toml)$" --not-match-f="fake_mongo_repository.rs"  --by-file-by-lang .`
+`cloc --exclude-dir=target,.next,node_modules,docs,assets,public,tests-examples,playwright-report,test-results --not-match-f=".*\.(json|md|toml)$" --not-match-f="fake_mongo_repository.rs" --not-match-f="multiplex_service.rs" --by-file-by-lang .`
+
+| Language         |    files |    blank |  comment |     code |
+| :--------------- | -------: | -------: | -------: | -------: |
+| Rust             |       36 |      128 |       94 |     1210 |
+| TypeScript       |        7 |       27 |       49 |      199 |
+| Protocol Buffers |        5 |       20 |        0 |       61 |
+| HTML             |        3 |        3 |        0 |       37 |
+| CSS              |        3 |        4 |        0 |       36 |
+| JavaScript       |        2 |        2 |        2 |       10 |
+| --------         | -------- | -------- | -------- | -------- |
+| SUM:             |       56 |      184 |      145 |     1553 |
 
 ## Databases
 
