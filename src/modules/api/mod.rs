@@ -19,7 +19,7 @@ pub struct ApiState {
 }
 
 pub async fn new_api_state() -> ApiState {
-    let collections = persistence::connect_to_mongo().await.unwrap();
+    let collections = persistence::new_mongo_collections().await.unwrap();
     let article_repository = MongoEntityRepository::<Article>::new(collections.articles.clone());
     ApiState {
         article_repository: Arc::new(article_repository.clone()),

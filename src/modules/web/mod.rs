@@ -20,7 +20,7 @@ pub struct WebState {
 }
 
 pub async fn new_web_state() -> WebState {
-    let collections = persistence::connect_to_mongo().await.unwrap();
+    let collections = persistence::new_mongo_collections().await.unwrap();
     let article_repository = MongoEntityRepository::<Article>::new(collections.articles.clone());
     WebState {
         article_repository: Arc::new(article_repository.clone()),

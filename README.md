@@ -35,9 +35,13 @@ _`rest_articles_axum`_ _is a blogging platform_
 
 ## Databases
 
-### postgres_api_schema
+### postgres_identity
 
-![postgres api schema img](docs/db/postgres_api_schema.png "postgres_api_schema")
+![postgres identity db img](docs/db/postgres_identity.png "postgres_identity")
+
+### postgres_api
+
+![postgres api db img](docs/db/postgres_api.png "postgres_api")
 
 ## TODO
 

@@ -9,7 +9,7 @@ pub struct Collections {
     pub articles: Collection<Article>,
 }
 
-pub async fn connect_to_mongo() -> Result<Collections, mongodb::error::Error> {
+pub async fn new_mongo_collections() -> Result<Collections, mongodb::error::Error> {
     let client_options = ClientOptions::parse("mongodb://localhost:27017").await?;
     let client = Client::with_options(client_options)?;
 
