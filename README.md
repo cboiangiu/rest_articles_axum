@@ -35,16 +35,17 @@ _`rest_articles_axum`_ _is a blogging platform_
 
 ## Databases
 
-### postgres_identity
+### postgres
 
-![postgres identity db img](docs/db/postgres_identity.png "postgres_identity")
+![postgres schemas img](docs/db/postgres_schemas.png "postgres_schemas")
 
-### postgres_api
+### mongo
 
-![postgres api db img](docs/db/postgres_api.png "postgres_api")
+![mongo schemas img](docs/db/mongo_schemas.png "mongo_schemas")
 
 ## TODO
 
+- add tags, follow profiles, follow custom tags list
 - implement and use postgres repository/orm solution
 - implement e2e testing
 - implement an event sourcing solution
