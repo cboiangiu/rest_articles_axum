@@ -1,0 +1,21 @@
+product: android/app
+
+dependencies: 
+  - ../shared
+  - $compose.runtime
+  - $compose.foundation
+  - $compose.material
+  - $libs.compose.ui
+  - $libs.compose.ui.tooling.preview
+  - $libs.androidx.activity.compose
+  - $libs.androidx.viewmodel.compose
+  - $libs.androidx.navigation.compose
+  - $libs.koin.androidx.compose
+  - $libs.coil.compose
+  - $libs.kotlinx.datetime
+
+settings: 
+  compose: enabled
+  android: 
+    applicationId: com.jetbrains.kmpapp
+    namespace: com.jetbrains.kmpapp

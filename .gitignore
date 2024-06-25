@@ -1,5 +1,7 @@
 /target
 
+local.properties
+
 # General
 .DS_Store
 .AppleDouble
